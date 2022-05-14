@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Signin from "./pages/Signin";
+import Dashboard from "./pages/Dashboard";
+import { CustomContextProvider } from "./Hooks/useCustomContext";
+import { useState } from "react";
+import Notification from "./pages/Notification";
 
-function App() {
+export default function App() {
+  const [login, setLogin] = useState(false);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <CustomContextProvider value={{ login, setLogin }}>
+      <Router>
+        <Routes>
+          {!login ? (
+            <Route path="/" element={<Signin />} />
+          ) : (
+            <Route path="/" element={<Dashboard />} />
+          )}
+          <Route path="/notifications" element={<Notification />} />
+        </Routes>
+      </Router>
+    </CustomContextProvider>
   );
 }
-
-export default App;
